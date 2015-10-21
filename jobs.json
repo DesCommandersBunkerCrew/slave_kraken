@@ -1,0 +1,23 @@
+[
+  {
+    "experiment_id": "experiment1",
+    "id": "1",
+    "status": "in_progress",
+    "experiment_zip_url": "http://127.0.0.1:5000/templates/experiments/experiment1/dl.zip",
+    "push_back_url": "http://127.0.0.1:5000/"
+  },
+  {
+    "experiment_id": "101",
+    "id": "2",
+    "status": "open",
+    "experiment_zip_url": "http://127.0.0.1:5000/templates/experiments/experiment2/dl.zip",
+    "push_back_url": "http://127.0.0.1:5000/"
+  },
+  {
+    "experiment_id": "1337",
+    "id": "3",
+    "status": "open",
+    "experiment_zip_url": "http://127.0.0.1:5000/templates/experiments/experiment2/dl.zip",
+    "push_back_url": "http://127.0.0.1:5000/"
+  }
+]

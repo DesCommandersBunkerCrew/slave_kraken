@@ -1,11 +1,7 @@
 import requests, os, zipfile, json
 
 jobsURL = 'https://github.com/timeline.json'
-downloadURL = 'http://www.blog.pythonlibrary.org/wp-content/uploads/2012/06/wxDbViewer.zip'
-uploadURL = 'http://www.blog.pythonlibrary.org/wp-content/uploads/2012/06/wxDbViewer.zip'
-id = 0
-status = 'open'
-
+test_download_url = 'http://www.blog.pythonlibrary.org/wp-content/uploads/2012/06/wxDbViewer.zip'
 
 def get_jobs(srcpath):
     r = requests.get(srcpath)
@@ -16,7 +12,7 @@ def get_jobs(srcpath):
 
 
 def get_open_job():
-    jobs = get_jobs()
+    jobs = get_jobs(jobsURL)
     print(json.dumps(jobs))
     if jobs is True:
         return jobs[0]
@@ -24,12 +20,13 @@ def get_open_job():
         return None
 
 
-def request_open_job_to_process(srcpath):
+def request_open_job_to_process():
     job = get_open_job()
     if job is not None:
-        download_file(srcpath, job['id'] + '.zip', 'data/download/')
-        unzip('data/download/', job['id'], 'data/unzipped/')
-        zip('data/unzipped/', job['id'] + '_result', 'data/zipped/')
+        download_file(test_download_url, job['id'] + '.zip', 'data/download/')
+        unzip('data/download/', job['id'] + '.zip', 'data/unzipped/')
+        # start external program
+        zip('data/unzipped/', job['id'] + '_result.zip', 'data/zipped/')
     else:
         return 0
 
