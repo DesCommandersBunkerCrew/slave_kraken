@@ -1,6 +1,6 @@
 import requests, os, zipfile, json
 
-jobsURL = 'https://github.com/timeline.json'
+jobsURL = 'http://jsonplaceholder.typicode.com/posts'
 test_download_url = 'http://www.blog.pythonlibrary.org/wp-content/uploads/2012/06/wxDbViewer.zip'
 
 def get_jobs(srcpath):
@@ -13,8 +13,7 @@ def get_jobs(srcpath):
 
 def get_open_job():
     jobs = get_jobs(jobsURL)
-    print(json.dumps(jobs))
-    if jobs is True:
+    if jobs is not None:
         return jobs[0]
     else:
         return None
@@ -23,10 +22,10 @@ def get_open_job():
 def request_open_job_to_process():
     job = get_open_job()
     if job is not None:
-        download_file(test_download_url, job['id'] + '.zip', 'data/download/')
-        unzip('data/download/', job['id'] + '.zip', 'data/unzipped/')
+        download_file(test_download_url, str(job['id']) + '.zip', 'data/download/')
+        unzip('data/download/', str(job['id']) + '.zip', 'data/unzipped/')
         # start external program
-        zip('data/unzipped/', job['id'] + '_result.zip', 'data/zipped/')
+        zip('data/unzipped/', str(job['id']) + '_result.zip', 'data/zipped/')
     else:
         return 0
 
@@ -78,3 +77,6 @@ def zip(srcpath, zipname, dstpath):
             print('ZIP: ' + srcpath + filename + ' to ' + dstpath + zipname)
             zfile.write(absname, arcname)
     zfile.close()
+
+
+request_open_job_to_process()
