@@ -21,14 +21,15 @@ def download_file(srcpath, filename, dstpath):
 
     r = requests.get(srcpath, stream=True)
     with open(dstpath + '/' + filename, 'wb') as f:
-            for chunk in r.iter_content(chunk_size=1024):
-                if chunk:
-                    f.write(chunk)
+        for chunk in r.iter_content(chunk_size=1024):
+            if chunk:
+                f.write(chunk)
+
 
 # file uploaden
 
 def upload_file(srcpath, filename, dstpath):
-    files = {'upload_file': open(srcpath + '/' + filename,'rb')}
+    files = {'upload_file': open(srcpath + '/' + filename, 'rb')}
     values = {'DB': 'photcat', 'OUT': 'csv', 'SHORT': 'short'}
 
     r = requests.post(dstpath, files=files, data=values)
