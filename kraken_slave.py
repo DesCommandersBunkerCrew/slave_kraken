@@ -1,32 +1,60 @@
-import requests, os, zipfile
+import requests, os, zipfile, json
 
-jobsURL = 'https://github.com/timeline.json'
-downloadURL = 'http://www.blog.pythonlibrary.org/wp-content/uploads/2012/06/wxDbViewer.zip'
-uploadURL = 'http://www.blog.pythonlibrary.org/wp-content/uploads/2012/06/wxDbViewer.zip'
-id = 0
-status = 'open'
+jobsURL = 'http://jsonplaceholder.typicode.com/posts'
+test_download_url = 'http://www.blog.pythonlibrary.org/wp-content/uploads/2012/06/wxDbViewer.zip'
 
-def getJobs(url):
-    j = requests.get(url)
-    # status = blocked
-    jobList = j.json()
-    return jobList
+def get_jobs(srcpath):
+    r = requests.get(srcpath)
+    if r is not None:
+        return r.json()
+    else:
+        return None
+
+
+def get_open_job():
+    jobs = get_jobs(jobsURL)
+    if jobs is not None:
+        return jobs[0]
+    else:
+        return None
+
+
+def request_open_job_to_process():
+    job = get_open_job()
+    if job is not None:
+        download_file(test_download_url, str(job['id']) + '.zip', 'data/download/')
+        unzip('data/download/', str(job['id']) + '.zip', 'data/unzipped/')
+        # start external program
+        zip('data/unzipped/', str(job['id']) + '_result.zip', 'data/zipped/')
+    else:
+        return 0
+
 
 # file downloaden
-def getFile(url):
-    if not os.path.exists('DATA/downloadedzip'):
-        os.makedirs('DATA/downloadedzip')
+def download_file(srcpath, filename, dstpath):
+    if not os.path.exists(dstpath):
+        os.makedirs(dstpath)
 
-    r = requests.get(url, stream=True)
-    with open('DATA/downloadedzip/code2.zip', 'wb') as f:
-            for chunk in r.iter_content(chunk_size=1024):
-                if chunk:
-                    f.write(chunk)
+    r = requests.get(srcpath, stream=True)
+    with open(dstpath + '/' + filename, 'wb') as f:
+        for chunk in r.iter_content(chunk_size=1024):
+            if chunk:
+                f.write(chunk)
+
+
+# file uploaden
+def upload_file(srcpath, filename, dstpath):
+    files = {'upload_file': open(srcpath + '/' + filename, 'rb')}
+    values = {'DB': 'photcat', 'OUT': 'csv', 'SHORT': 'short'}
+
+    r = requests.post(dstpath, files=files, data=values)
+
 
 # zip Archiv entpacken
 def unzip(srcpath, zipname, dstpath):
     if not os.path.exists(srcpath):
         os.makedirs(srcpath)
+
     zfile = zipfile.ZipFile(srcpath + zipname)
     for name in zfile.namelist():
         (dirname, filename) = os.path.split(name)
@@ -34,10 +62,12 @@ def unzip(srcpath, zipname, dstpath):
 
         zfile.extract(name, dstpath)
 
+
 # zip Archiv erstellen
 def zip(srcpath, zipname, dstpath):
     if not os.path.exists(dstpath):
         os.makedirs(dstpath)
+
     zfile = zipfile.ZipFile(dstpath + zipname, 'w', zipfile.ZIP_DEFLATED)
     abs_src = os.path.abspath(srcpath)
     for dirname, subdirs, files in os.walk(srcpath):
@@ -48,15 +78,5 @@ def zip(srcpath, zipname, dstpath):
             zfile.write(absname, arcname)
     zfile.close()
 
-getFile(downloadURL)
 
-# Archiv entpacken aus /DATA/downloadedzip in /DATA/extractedzip
-unzip('DATA/downloadedzip/', 'code2.zip', 'DATA/extractedzip/')
-print('')
-
-# Archiv erstellen aus /DATA/extractedzip in /DATA/resultzip
-zip('DATA/extractedzip/', 'result.zip', 'DATA/resultzip/')
-print('')
-
-jobList = getJobs(jobsURL)
-print(jobList['message'])
+request_open_job_to_process()
