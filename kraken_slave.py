@@ -1,8 +1,4 @@
-#beefsupreme
-
 import requests, os, zipfile
-
-# Lennart
 
 jobsURL = 'https://github.com/timeline.json'
 downloadURL = 'http://www.blog.pythonlibrary.org/wp-content/uploads/2012/06/wxDbViewer.zip'
