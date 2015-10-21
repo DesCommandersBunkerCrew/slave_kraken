@@ -27,7 +27,6 @@ def download_file(srcpath, filename, dstpath):
 
 
 # file uploaden
-
 def upload_file(srcpath, filename, dstpath):
     files = {'upload_file': open(srcpath + '/' + filename, 'rb')}
     values = {'DB': 'photcat', 'OUT': 'csv', 'SHORT': 'short'}
