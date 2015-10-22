@@ -79,4 +79,4 @@ def request_open_job_to_process():
 
 
 request_open_job_to_process()
-upload_file('data/zipped/', '1_result.zip', 'http://posttestserver.com/post.php')
+upload_file('../data/zipped/', '1_result.zip', 'http://posttestserver.com/post.php')
