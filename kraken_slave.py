@@ -35,8 +35,8 @@ def download_file(srcpath, filename, dstpath):
 
 # file upload
 def upload_file(srcpath, filename, dstpath):
-    files = {'upload_file': open(srcpath + filename, 'rb')}
-    requests.put(dstpath, files=files)
+    files = {'1_result.zip': open(srcpath + filename, 'rb')}
+    r = requests.put(dstpath, files=files)
     r.text
 
 
@@ -47,9 +47,6 @@ def unzip_file(srcpath, zipname, dstpath):
 
     zfile = zipfile.ZipFile(srcpath + zipname)
     for name in zfile.namelist():
-        (dirname, filename) = os.path.split(name)
-        print('UNZIP: ' + filename + ' from ' + srcpath + zipname + ' to ' + dstpath)
-
         zfile.extract(name, dstpath)
 
 
@@ -64,7 +61,6 @@ def zip_file(srcpath, zipname, dstpath):
         for filename in files:
             absname = os.path.abspath(os.path.join(dirname, filename))
             arcname = absname[len(abs_src) + 1:]
-            print('ZIP: ' + srcpath + filename + ' to ' + dstpath + zipname)
             zfile.write(absname, arcname)
     zfile.close()
 
@@ -81,4 +77,4 @@ def request_open_job_to_process():
 
 
 request_open_job_to_process()
-upload_file('data/zipped/', '1_result.zip', 'http://www.posttestserver.com/post.php')
+upload_file('data/zipped/', '1_result.zip', 'http://www.httpbin.org/post')
