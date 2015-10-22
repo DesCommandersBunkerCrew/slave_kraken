@@ -1,4 +1,6 @@
-import requests, os, zipfile
+import os
+import requests
+import zipfile
 
 jobsURL = 'http://jsonplaceholder.typicode.com/posts'
 test_download_url = 'http://www.blog.pythonlibrary.org/wp-content/uploads/2012/06/wxDbViewer.zip'
@@ -39,7 +41,6 @@ def upload_file(srcpath, filename, dstpath):
     r = requests.put(dstpath, files=files)
     r.text
 
-
 # zip extract
 def unzip_file(srcpath, zipname, dstpath):
     if not os.path.exists(srcpath):
@@ -70,11 +71,15 @@ def request_open_job_to_process():
     if job is not None:
         download_file(test_download_url, str(job['id']) + '.zip', 'data/download/')
         unzip_file('data/download/', str(job['id']) + '.zip', 'data/unzipped/')
+        # TODO:
+        # read config
         # start external program
         zip_file('data/unzipped/', str(job['id']) + '_result.zip', 'data/zipped/')
+        # TODO:
+        # upload results
     else:
         return 0
 
 
 request_open_job_to_process()
-upload_file('data/zipped/', '1_result.zip', 'http://www.httpbin.org/post')
+upload_file('data/zipped/', '1_result.zip', 'http://posttestserver.com/post.php')
