@@ -71,12 +71,9 @@ def request_open_job_to_process():
     if job is not None:
         download_file(test_download_url, str(job['id']) + '.zip', 'data/download/')
         unzip_file('data/download/', str(job['id']) + '.zip', 'data/unzipped/')
-        # TODO:
-        # read config
-        # start external program
+        # TODO: read config, start external program
         zip_file('data/unzipped/', str(job['id']) + '_result.zip', 'data/zipped/')
-        # TODO:
-        # upload results
+        # TODO: upload results
     else:
         return 0
 
