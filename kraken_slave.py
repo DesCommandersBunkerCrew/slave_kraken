@@ -27,7 +27,7 @@ def download_file(srcpath, filename, dstpath):
         os.makedirs(dstpath)
 
     r = requests.get(srcpath, stream=True)
-    with open(dstpath + '/' + filename, 'wb') as f:
+    with open(dstpath + filename, 'wb') as f:
         for chunk in r.iter_content(chunk_size=1024):
             if chunk:
                 f.write(chunk)
@@ -35,8 +35,9 @@ def download_file(srcpath, filename, dstpath):
 
 # file upload
 def upload_file(srcpath, filename, dstpath):
-    files = {'upload_file': open(srcpath + '/' + filename, 'rb')}
-    r = requests.post(dstpath, files=files)
+    files = {'upload_file': open(srcpath + filename, 'rb')}
+    requests.put(dstpath, files=files)
+    r.text
 
 
 # zip extract
@@ -80,3 +81,4 @@ def request_open_job_to_process():
 
 
 request_open_job_to_process()
+upload_file('data/zipped/', '1_result.zip', 'http://www.posttestserver.com/post.php')
